@@ -1,2 +1,3 @@
 # message-page-service
-This is repository for backend-messagepage.
+Message page function handles messaging and stores messages.
+- **Content**: Messaging APIs
