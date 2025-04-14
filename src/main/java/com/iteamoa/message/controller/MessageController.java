@@ -22,4 +22,10 @@ public class MessageController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @DeleteMapping()
+    public ResponseEntity<?> deleteMessage(@RequestBody MessageDto messageDto) {
+        messageService.deleteMessage(messageDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

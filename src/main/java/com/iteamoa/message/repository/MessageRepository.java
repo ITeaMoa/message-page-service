@@ -23,4 +23,7 @@ public class MessageRepository {
         messageTable.putItem(new MessageEntity(messageDto));
     }
 
+    public void deleteMessage(MessageDto messageDto) {
+        messageTable.deleteItem(new MessageEntity(messageDto));
+    }
 }

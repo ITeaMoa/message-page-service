@@ -7,6 +7,8 @@ import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 
+import java.time.LocalDateTime;
+
 @Setter
 @DynamoDbBean
 public class MessageEntity extends BaseEntity {
@@ -17,7 +19,8 @@ public class MessageEntity extends BaseEntity {
     public MessageEntity() {}
     public MessageEntity(MessageDto messageDto) {
         super(
-            KeyConverter.toPk(DynamoDbEntityType.MESSAGE, messageDto.getPk()),
+            messageDto.getPk(),
+            messageDto.getSk() == null ? LocalDateTime.now().toString() : messageDto.getSk(),
             KeyConverter.toPk(DynamoDbEntityType.USER, messageDto.getCreatorId()),
             DynamoDbEntityType.MESSAGE
         );

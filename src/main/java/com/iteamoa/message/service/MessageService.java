@@ -14,12 +14,23 @@ public class MessageService {
 
     public void saveMessage(MessageDto messageDto) {
         Objects.requireNonNull(messageDto.getPk(), "Pk cannot be null");
-        Objects.requireNonNull(messageDto.getSk(), "Sk cannot be null");
+        Objects.requireNonNull(messageDto.getCreatorId(), "CreatorId cannot be null");
+        Objects.requireNonNull(messageDto.getReceiverId(), "ReceiverId cannot be null");
+        Objects.requireNonNull(messageDto.getMessageContent(), "Content cannot be null");
 
         messageRepository.saveMessage(messageDto);
     }
 
+
+
     public void getConversationPartner(String pk, String receiverId) {
 
+    }
+
+    public void deleteMessage(MessageDto messageDto) {
+        Objects.requireNonNull(messageDto.getPk(), "Pk cannot be null");
+        Objects.requireNonNull(messageDto.getSk(), "Sk cannot be null");
+
+        messageRepository.deleteMessage(messageDto);
     }
 }

@@ -20,13 +20,13 @@ public abstract class BaseEntity {
     private Boolean userStatus;
 
     public BaseEntity() {}
-    public BaseEntity(String pk, String creatorId, DynamoDbEntityType entityTpe) {
-        this.timestamp = Objects.requireNonNullElseGet(timestamp, LocalDateTime::now);
-        this.pk = pk;
-        this.sk = KeyConverter.toPk(DynamoDbEntityType.TIMESTAMP, timestamp);
+    public BaseEntity(String pk, String sk, String creatorId, DynamoDbEntityType entityTpe) {
+        this.pk = KeyConverter.toPk(DynamoDbEntityType.MESSAGE, pk);
+        this.sk = KeyConverter.toPk(DynamoDbEntityType.TIMESTAMP, sk);
         this.creatorId = creatorId;
         this.entityType = entityTpe;
         this.userStatus = true;
+        this.timestamp = LocalDateTime.parse(sk);
     }
 
     @DynamoDbPartitionKey

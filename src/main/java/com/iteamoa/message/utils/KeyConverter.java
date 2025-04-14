@@ -12,10 +12,6 @@ public class KeyConverter {
         return type.getType() + delimiter + id;
     }
 
-    public static String toPk(DynamoDbEntityType type, LocalDateTime localDateTime){
-        return type.getType() + delimiter + localDateTime;
-    }
-
     public static String toStringId(String key) {return key.split(delimiter)[1];}
 
     public static Key toKey(String Pk, String Sk){
