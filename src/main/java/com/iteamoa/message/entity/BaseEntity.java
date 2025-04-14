@@ -6,8 +6,6 @@ import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Objects;
 
 @Setter
 @DynamoDbBean
@@ -62,9 +60,7 @@ public abstract class BaseEntity {
     }
 
     @DynamoDbAttribute("userStatus")
-    @DynamoDbSecondarySortKey(indexNames = {"CreatorId-index"})
-    public boolean getUserStatus(){
+    public Boolean getUserStatus(){
         return userStatus;
     }
-
 }

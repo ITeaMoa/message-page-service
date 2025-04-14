@@ -28,4 +28,9 @@ public class MessageController {
         messageService.deleteMessage(messageDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @GetMapping()
+    public ResponseEntity<?> getAllMessages(@RequestParam String pk) {
+        return ResponseEntity.ok(messageService.getAllMessage(pk));
+    }
 }

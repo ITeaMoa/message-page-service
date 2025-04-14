@@ -2,6 +2,7 @@ package com.iteamoa.message.dto;
 
 import com.iteamoa.message.constant.DynamoDbEntityType;
 import com.iteamoa.message.entity.MessageEntity;
+import com.iteamoa.message.utils.KeyConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,17 +22,17 @@ public class MessageDto {
     private Boolean userStatus;
     private String receiverId;
     private String messageContent;
-    private boolean messageStatus;
+    private Boolean messageStatus;
     private LocalDateTime timestamp;
 
     public static MessageDto toMessageDto(MessageEntity messageEntity) {
         return new MessageDto(
-                messageEntity.getPk(),
-                messageEntity.getSk(),
+                KeyConverter.toStringId(messageEntity.getPk()),
+                KeyConverter.toStringId(messageEntity.getSk()),
                 messageEntity.getEntityType(),
-                messageEntity.getCreatorId(),
+                KeyConverter.toStringId(messageEntity.getCreatorId()),
                 messageEntity.getUserStatus(),
-                messageEntity.getReceiverId(),
+                KeyConverter.toStringId(messageEntity.getReceiverId()),
                 messageEntity.getMessageContent(),
                 messageEntity.getMessageStatus(),
                 messageEntity.getTimestamp()
