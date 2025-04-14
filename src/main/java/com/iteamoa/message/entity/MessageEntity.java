@@ -17,12 +17,11 @@ public class MessageEntity extends BaseEntity {
     public MessageEntity() {}
     public MessageEntity(MessageDto messageDto) {
         super(
-            KeyConverter.toPk(DynamoDbEntityType.USER, messageDto.getPk()),
-            KeyConverter.toPk(DynamoDbEntityType.MESSAGE, messageDto.getSk()),
-            messageDto.getPk(),
+            KeyConverter.toPk(DynamoDbEntityType.MESSAGE, messageDto.getPk()),
+            KeyConverter.toPk(DynamoDbEntityType.USER, messageDto.getCreatorId()),
             DynamoDbEntityType.MESSAGE
         );
-        this.receiverId = messageDto.getReceiverId();
+        this.receiverId = KeyConverter.toPk(DynamoDbEntityType.USER, messageDto.getReceiverId());
         this.messageContent = messageDto.getMessageContent();
         this.messageStatus = false;
     }

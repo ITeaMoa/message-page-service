@@ -1,10 +1,12 @@
 package com.iteamoa.message.entity;
 
 import com.iteamoa.message.constant.DynamoDbEntityType;
+import com.iteamoa.message.utils.KeyConverter;
 import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Setter
@@ -18,10 +20,10 @@ public abstract class BaseEntity {
     private Boolean userStatus;
 
     public BaseEntity() {}
-    public BaseEntity(String pk, String sk, String creatorId, DynamoDbEntityType entityTpe) {
-        this.pk = pk;
-        this.sk = sk;
+    public BaseEntity(String pk, String creatorId, DynamoDbEntityType entityTpe) {
         this.timestamp = Objects.requireNonNullElseGet(timestamp, LocalDateTime::now);
+        this.pk = pk;
+        this.sk = KeyConverter.toPk(DynamoDbEntityType.TIMESTAMP, timestamp);
         this.creatorId = creatorId;
         this.entityType = entityTpe;
         this.userStatus = true;
