@@ -3,8 +3,6 @@ package com.iteamoa.message.utils;
 import com.iteamoa.message.constant.DynamoDbEntityType;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 
-import java.time.LocalDateTime;
-
 public class KeyConverter {
     static final String delimiter = "#";
 
