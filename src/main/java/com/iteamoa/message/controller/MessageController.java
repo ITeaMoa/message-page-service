@@ -35,7 +35,7 @@ public class MessageController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getAllMessages(@RequestParam String pk) {
-        return ResponseEntity.ok(messageService.getAllMessage(pk));
+    public ResponseEntity<?> getAllMessages(@RequestParam String pk, @RequestParam String userId) {
+        return ResponseEntity.ok(messageService.getAllMessage(pk, userId));
     }
 }

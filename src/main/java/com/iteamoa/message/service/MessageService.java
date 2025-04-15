@@ -48,8 +48,8 @@ public class MessageService {
         messageRepository.deleteMessage(messageDto);
     }
 
-    public List<MessageDto> getAllMessage(String messageId) {
-        List<MessageEntity> messageEntities = messageRepository.getAllMessage(messageId);
+    public List<MessageDto> getAllMessage(String messageId, String userId) {
+        List<MessageEntity> messageEntities = messageRepository.getAllMessage(messageId, userId);
         return messageEntities.stream()
                 .map(MessageDto::toMessageDto)
                 .collect(Collectors.toList());
@@ -64,7 +64,7 @@ public class MessageService {
         return messageMap.keySet().stream()
                 .collect(Collectors.toMap(
                         key -> userProfileRepository.getUserProfileByUserId(key).getNickname(),
-                        Function.identity()
+                        messageMap::get
                 ));
     }
 }
