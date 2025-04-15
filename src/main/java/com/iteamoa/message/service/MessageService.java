@@ -1,7 +1,6 @@
 package com.iteamoa.message.service;
 
 import com.iteamoa.message.dto.MessageDto;
-import com.iteamoa.message.dto.UserProfileDto;
 import com.iteamoa.message.entity.MessageEntity;
 import com.iteamoa.message.entity.UserProfileEntity;
 import com.iteamoa.message.repository.MessageRepository;
@@ -9,9 +8,8 @@ import com.iteamoa.message.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +35,7 @@ public class MessageService {
                 userProfileRepository.updateUserProfile(recipient);
             }
         }
+
         messageRepository.saveMessage(messageDto);
     }
 
@@ -52,5 +51,18 @@ public class MessageService {
         return messageEntities.stream()
                 .map(MessageDto::toMessageDto)
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, String> getUserList(String pk) {
+        Objects.requireNonNull(pk, "Pk cannot be null");
+
+        var userProfile = userProfileRepository.getUserProfileByUserId(pk);
+        var messageMap = userProfile.getMessageId();
+
+        return messageMap.keySet().stream()
+                .collect(Collectors.toMap(
+                        key -> userProfileRepository.getUserProfileByUserId(key).getNickname(),
+                        Function.identity()
+                ));
     }
 }

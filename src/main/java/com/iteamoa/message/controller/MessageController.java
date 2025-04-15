@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class MessageController {
     private final MessageService messageService;
 
+    @GetMapping("/list")
+    public ResponseEntity<?> getUserList(@RequestParam String pk) {
+        return ResponseEntity.ok(messageService.getUserList(pk));
+    }
+
     @PostMapping()
     public ResponseEntity<?> sendMessage(@RequestBody MessageDto messageDto) {
         try{
