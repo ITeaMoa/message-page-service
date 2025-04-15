@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @DynamoDbBean
 public class MessageEntity extends BaseEntity {
-    private String receiverId;
+    private String recipientId;
     private String messageContent;
     private boolean messageStatus;
 
@@ -24,14 +24,14 @@ public class MessageEntity extends BaseEntity {
             KeyConverter.toPk(DynamoDbEntityType.USER, messageDto.getCreatorId()),
             DynamoDbEntityType.MESSAGE
         );
-        this.receiverId = KeyConverter.toPk(DynamoDbEntityType.USER, messageDto.getReceiverId());
+        this.recipientId = KeyConverter.toPk(DynamoDbEntityType.USER, messageDto.getRecipientId());
         this.messageContent = messageDto.getMessageContent();
         this.messageStatus = false;
     }
 
-    @DynamoDbAttribute("receiverId")
-    public String getReceiverId() {
-        return receiverId;
+    @DynamoDbAttribute("recipientId")
+    public String getRecipientId() {
+        return recipientId;
     }
 
     @DynamoDbAttribute("messageContent")

@@ -20,7 +20,7 @@ public class MessageDto {
     private DynamoDbEntityType entityType;
     private String creatorId;
     private Boolean userStatus;
-    private String receiverId;
+    private String recipientId;
     private String messageContent;
     private Boolean messageStatus;
     private LocalDateTime timestamp;
@@ -32,7 +32,7 @@ public class MessageDto {
                 messageEntity.getEntityType(),
                 KeyConverter.toStringId(messageEntity.getCreatorId()),
                 messageEntity.getUserStatus(),
-                KeyConverter.toStringId(messageEntity.getReceiverId()),
+                KeyConverter.toStringId(messageEntity.getRecipientId()),
                 messageEntity.getMessageContent(),
                 messageEntity.getMessageStatus(),
                 messageEntity.getTimestamp()

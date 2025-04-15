@@ -1,10 +1,12 @@
 package com.iteamoa.message.service;
 
+import com.iteamoa.message.constant.DynamoDbEntityType;
 import com.iteamoa.message.dto.MessageDto;
 import com.iteamoa.message.entity.MessageEntity;
 import com.iteamoa.message.entity.UserProfileEntity;
 import com.iteamoa.message.repository.MessageRepository;
 import com.iteamoa.message.repository.UserProfileRepository;
+import com.iteamoa.message.utils.KeyConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +22,16 @@ public class MessageService {
 
     public void saveMessage(MessageDto messageDto) {
         Objects.requireNonNull(messageDto.getCreatorId(), "CreatorId cannot be null");
-        Objects.requireNonNull(messageDto.getReceiverId(), "ReceiverId cannot be null");
+        Objects.requireNonNull(messageDto.getRecipientId(), "ReceiverId cannot be null");
         Objects.requireNonNull(messageDto.getMessageContent(), "Content cannot be null");
 
         UserProfileEntity sender = userProfileRepository.getUserProfileByUserId(messageDto.getCreatorId());
-        UserProfileEntity recipient = userProfileRepository.getUserProfileByUserId(messageDto.getReceiverId());
+        UserProfileEntity recipient = userProfileRepository.getUserProfileByUserId(messageDto.getRecipientId());
         if(messageDto.getPk() == null) {
-            messageDto.setPk(sender.getMessageId().get(messageDto.getReceiverId()));
+            messageDto.setPk(sender.getMessageId().get(messageDto.getRecipientId()));
             if(messageDto.getPk() == null) {
                 messageDto.setPk(UUID.randomUUID().toString());
-                sender.getMessageId().put(messageDto.getReceiverId(), messageDto.getPk());
+                sender.getMessageId().put(messageDto.getRecipientId(), messageDto.getPk());
                 recipient.getMessageId().put(messageDto.getCreatorId(), messageDto.getPk());
                 userProfileRepository.updateUserProfile(sender);
                 userProfileRepository.updateUserProfile(recipient);
