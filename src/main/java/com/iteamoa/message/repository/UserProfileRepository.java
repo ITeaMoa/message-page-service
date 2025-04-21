@@ -1,7 +1,6 @@
 package com.iteamoa.message.repository;
 
 import com.iteamoa.message.constant.DynamoDbEntityType;
-import com.iteamoa.message.dto.MessageDto;
 import com.iteamoa.message.entity.UserProfileEntity;
 import com.iteamoa.message.utils.KeyConverter;
 import org.springframework.stereotype.Repository;
