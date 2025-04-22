@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-deployment
+  namespace: message-namespace 
+  labels:
+    svc: message
+spec:
+  replicas: 1  # Two pods running the service
+  selector:
+    matchLabels:
+      svc: message
+  template:
+    metadata:
+      labels:
+        svc: message
+    spec:
+      imagePullSecrets:
+      - name: ecr-secret  # ECR secret
+      containers:
+      - name: message-service
+        image: 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/message:latest # Use ECR
+        imagePullPolicy: Always  # Always pull the latest image
+        ports:
+        - containerPort: 8080  # Check container's exposed port 
