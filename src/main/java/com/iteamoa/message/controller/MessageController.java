@@ -38,4 +38,9 @@ public class MessageController {
     public ResponseEntity<?> getAllMessages(@RequestParam String pk, @RequestParam String userId) {
         return ResponseEntity.ok(messageService.getAllMessage(pk, userId));
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> test() {
+        return ResponseEntity.ok("Connected successfully");
+    }
 }
