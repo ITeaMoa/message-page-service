@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: message-ingress
+  namespace: message-namespace
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  ingressClassName: nginx 
+  rules:
+    - host: api-iteamoa.brynnpark.cloud
+      http:
+        paths:
+        - path: /message
+          pathType: Prefix
+          backend:
+            service:
+              name: message-service
+              port:
+                number: 80
