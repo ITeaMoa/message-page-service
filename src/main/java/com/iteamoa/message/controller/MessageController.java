@@ -18,6 +18,11 @@ public class MessageController {
         return ResponseEntity.ok(messageService.getUserList(pk));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<?> getMessageCount(@RequestParam String pk) {
+        return ResponseEntity.ok(messageService.getMessageCount(pk));
+    }
+
     @PostMapping()
     public ResponseEntity<?> sendMessage(@RequestBody MessageDto messageDto) {
         try{
