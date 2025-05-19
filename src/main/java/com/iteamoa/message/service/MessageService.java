@@ -1,17 +1,14 @@
 package com.iteamoa.message.service;
 
-import com.iteamoa.message.constant.DynamoDbEntityType;
 import com.iteamoa.message.dto.MessageDto;
 import com.iteamoa.message.entity.MessageEntity;
 import com.iteamoa.message.entity.UserProfileEntity;
 import com.iteamoa.message.repository.MessageRepository;
 import com.iteamoa.message.repository.UserProfileRepository;
-import com.iteamoa.message.utils.KeyConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,7 +45,10 @@ public class MessageService {
         messageRepository.deleteMessage(messageDto);
     }
 
-    public List<MessageDto> getAllMessage(String messageId, String userId) {
+    public List<MessageDto> getAllMessage(String userId, String recipientId) {
+        UserProfileEntity userProfileEntity = userProfileRepository.getUserProfileByUserId(userId);
+        String messageId = userProfileEntity.getMessageId().get(recipientId);
+
         List<MessageEntity> messageEntities = messageRepository.getAllMessage(messageId, userId);
         return messageEntities.stream()
                 .map(MessageDto::toMessageDto)
@@ -63,8 +63,8 @@ public class MessageService {
 
         return messageMap.keySet().stream()
                 .collect(Collectors.toMap(
-                        key -> userProfileRepository.getUserProfileByUserId(key).getNickname(),
-                        messageMap::get
+                        key -> key,
+                        key -> userProfileRepository.getUserProfileByUserId(key).getNickname()
                 ));
     }
 }
