@@ -16,7 +16,6 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Repository
 public class MessageRepository {
@@ -37,33 +36,27 @@ public class MessageRepository {
         messageTable.deleteItem(new MessageEntity(messageDto));
     }
 
-    public List<MessageEntity> getAllMessage(String messageId, String userId) {
+    public List<MessageEntity> getAllMessage(String messageId) {
         QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k
                 .partitionValue(KeyConverter.toPk(DynamoDbEntityType.MESSAGE, messageId))
         );
 
         final SdkIterable<Page<MessageEntity>> pagedResult = messageTable.query(q -> q
                 .queryConditional(queryConditional)
-                .scanIndexForward(true)
-                .attributesToProject());
+                .scanIndexForward(false)
+                .attributesToProject()
+        );
 
         List<MessageEntity> messageList = new ArrayList<>();
-        boolean foundTrueStatus = false;
-
         for (Page<MessageEntity> page : pagedResult) {
-            for (MessageEntity entity : page.items()) {
-                if (!foundTrueStatus && Objects.equals(entity.getRecipientId(), KeyConverter.toPk(DynamoDbEntityType.USER, userId))) {
-                    if (Boolean.TRUE.equals(entity.getMessageStatus())) {
-                        foundTrueStatus = true;
-                    } else {
-                        entity.setMessageStatus(true);
-                        messageTable.updateItem(entity);
-                    }
-                }
-                messageList.add(entity);
-            }
+            messageList.addAll(page.items());
         }
 
         return messageList;
     }
+
+    public void updateMessageStatus(MessageEntity entity) {
+        messageTable.updateItem(entity);
+    }
+
 }

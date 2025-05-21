@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,9 +47,27 @@ public class MessageService {
         messageRepository.deleteMessage(messageDto);
     }
 
-    public List<MessageDto> getAllMessage(String messageId, String userId) {
-        List<MessageEntity> messageEntities = messageRepository.getAllMessage(messageId, userId);
-        return messageEntities.stream()
+    public List<MessageDto> getAllMessage(String userId, String recipientId) {
+        UserProfileEntity userProfileEntity = userProfileRepository.getUserProfileByUserId(userId);
+        String messageId = userProfileEntity.getMessageId().get(recipientId);
+
+        List<MessageEntity> messageEntities = messageRepository.getAllMessage(messageId);
+        List<MessageEntity> resultList = new ArrayList<>();
+        boolean foundTrueStatus = false;
+
+        for (MessageEntity entity : messageEntities) {
+            if (!foundTrueStatus && Objects.equals(entity.getRecipientId(), KeyConverter.toPk(DynamoDbEntityType.USER, userId))) {
+                if (Boolean.TRUE.equals(entity.getMessageStatus())) {
+                    foundTrueStatus = true;
+                } else {
+                    entity.setMessageStatus(true);
+                    messageRepository.updateMessageStatus(entity);
+                }
+            }
+            resultList.add(entity);
+        }
+
+        return resultList.stream()
                 .map(MessageDto::toMessageDto)
                 .collect(Collectors.toList());
     }
@@ -58,13 +75,47 @@ public class MessageService {
     public Map<String, String> getUserList(String pk) {
         Objects.requireNonNull(pk, "Pk cannot be null");
 
-        var userProfile = userProfileRepository.getUserProfileByUserId(pk);
-        var messageMap = userProfile.getMessageId();
+        UserProfileEntity userProfile = userProfileRepository.getUserProfileByUserId(pk);
+        Map<String, String> messageMap = userProfile.getMessageId();
 
         return messageMap.keySet().stream()
                 .collect(Collectors.toMap(
-                        key -> userProfileRepository.getUserProfileByUserId(key).getNickname(),
-                        messageMap::get
+                        key -> key,
+                        key -> userProfileRepository.getUserProfileByUserId(key).getNickname()
                 ));
     }
+
+    public Map<String, String> getMessageCount(String pk) {
+        Objects.requireNonNull(pk, "Pk cannot be null");
+
+        UserProfileEntity userProfile = userProfileRepository.getUserProfileByUserId(pk);
+        Map<String, String> messageMap = userProfile.getMessageId();
+
+        Map<String, String> unreadCountMap = new HashMap<>();
+        String myPk = KeyConverter.toPk(DynamoDbEntityType.USER, pk);
+
+        for (Map.Entry<String, String> entry : messageMap.entrySet()) {
+            String otherUserId = entry.getKey();
+            String messageId = entry.getValue();
+
+            List<MessageEntity> messages = messageRepository.getAllMessage(messageId);
+
+            int unreadCount = 0;
+
+            for (MessageEntity message : messages) {
+                if (Objects.equals(message.getRecipientId(), myPk)) {
+                    if (Boolean.FALSE.equals(message.getMessageStatus())) {
+                        unreadCount++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            unreadCountMap.put(otherUserId, String.valueOf(unreadCount));
+        }
+
+        return unreadCountMap;
+    }
+
+
 }

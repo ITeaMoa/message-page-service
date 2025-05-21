@@ -18,6 +18,11 @@ public class MessageController {
         return ResponseEntity.ok(messageService.getUserList(pk));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<?> getMessageCount(@RequestParam String pk) {
+        return ResponseEntity.ok(messageService.getMessageCount(pk));
+    }
+
     @PostMapping()
     public ResponseEntity<?> sendMessage(@RequestBody MessageDto messageDto) {
         try{
@@ -35,8 +40,8 @@ public class MessageController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getAllMessages(@RequestParam String pk, @RequestParam String userId) {
-        return ResponseEntity.ok(messageService.getAllMessage(pk, userId));
+    public ResponseEntity<?> getAllMessages(@RequestParam String userId, @RequestParam String recipientId) {
+        return ResponseEntity.ok(messageService.getAllMessage(userId, recipientId));
     }
 
     @GetMapping("/test")
