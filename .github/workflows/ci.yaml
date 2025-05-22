@@ -5,7 +5,7 @@ on:
     branches:
       - main  # Trigger workflow on push to the main branch
 
-permissions:
+permissions:  # This workflow requires write access to the repository contents
   contents: write
 
 jobs:
