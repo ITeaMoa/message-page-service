@@ -20,7 +20,7 @@ spec:
         - name: ecr-secret # ECR secret
       containers:
         - name: message-service
-          image: 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/message:ca892ec # Use ECR
+          image: 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/message:7520b26 # Use ECR
           imagePullPolicy: Always # Always pull the latest image
           ports:
             - containerPort: 8080 # Check container's exposed port 
