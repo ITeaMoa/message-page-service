@@ -7,6 +7,7 @@ import com.iteamoa.message.entity.UserProfileEntity;
 import com.iteamoa.message.repository.MessageRepository;
 import com.iteamoa.message.repository.UserProfileRepository;
 import com.iteamoa.message.utils.KeyConverter;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final UserProfileRepository userProfileRepository;
 
+    @Transactional
     public void saveMessage(MessageDto messageDto) {
         Objects.requireNonNull(messageDto.getCreatorId(), "CreatorId cannot be null");
         Objects.requireNonNull(messageDto.getRecipientId(), "ReceiverId cannot be null");
